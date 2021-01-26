@@ -58,3 +58,81 @@ class App extends React.Component {
 }
 ```
 
+## textarea 테그
+
+HTML에서 textarea 엘리먼트는 텍스트를 자식으로 정의 합니다  
+React에서 textarea는 value 어트리뷰트를 대신 사용합니다 이를 이용한면 textarea를 사용하는 폼은 한 줄 입력을 사용하는 폼과 비슷하게 작성할 수 있습니다
+
+```
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '',
+    };
+  }
+
+  handleChange = e => {
+   this.setState({value : e.target.value});
+  }
+  
+  handleSubmit = () => {
+    alert(this.state.value);
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <textarea value={this.state.value} onChange={this.handleChange}/>
+        <input type='submit' value='submit'/>
+      </form>
+    );
+  }
+}
+```
+
+## select 태그
+
+HTML에서 select는 드롭 다운 목록을 만듭니다   
+select는 selected 옵션이 있으므로 state에 정해준 값이 초기값이 됩니다  
+React에서 selected 어트리뷰트를 사용하는 대신 최상단 select 태그에 value 어트리뷰트를 사용합니다 한 곳에서 업데이트만 하면 되기 때문에 제어 컴포넌트에서 사용하기 편합니다
+
+```
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "select",
+    };
+  }
+
+  onSubmit = () => {
+    alert(this.state.value);
+  };
+
+  onChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.onSubmit}>
+        <label>
+          Animal
+          <select value={this.state.value} onChange={this.onChange}>
+            <option value="select">----</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="tiger">Tiger</option>
+            <option value="bear">Bear</option>
+          </select>
+        </label>
+      </form>
+    );
+  }
+}
+// selcte 태그에 multiple 옵셥을 허용하면 value 어트리뷰트에 배열을 전달할 수 있습니다
+// <select mutiple={true} value={[1,2,3,4,5]}>
+```
+
+> 전반적으로 input, textarea, select는 매우 비슷하게 동작합니다 모두 제어 컴포넌트를 구현 하는데 value 속성을 허용합니다
