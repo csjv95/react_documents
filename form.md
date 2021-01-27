@@ -136,3 +136,57 @@ class App extends React.Component {
 ```
 
 > 전반적으로 input, textarea, select는 매우 비슷하게 동작합니다 모두 제어 컴포넌트를 구현 하는데 value 속성을 허용합니다
+
+## 다중입력 제어하기
+
+여러 input 엘리먼트를 제어 해야할때 각 엘리먼트에 name 어트리뷰트를 추가하고 event.target.name 값을 통해 핸들러가 어떤 작업을 해야할지 선택할 수 있게 해줍니다 
+
+```
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      greeting : false,
+      get : 0
+    };
+  }
+
+  onChange = e => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name; // name 정의 => name에 따라 다른 동작을 할 수 있게 만들수 있음
+
+    this.setState({[name] : value}); // ES6문법 계산된 속성이름, 주어진 입력 이름에 상태키를 업데이트
+  }
+  
+  render() {
+    return (
+      <form>
+        <label>Can I get your phone number?
+          <input 
+          type = 'checkbox'
+          name = 'greeting' // name 추가
+          checked = {this.state.greeting}
+          onChange = {this.onChange}
+          />
+        </label>
+
+        <label>How many get phone number
+          <input 
+          type = 'number'
+          name = 'get'  // name 추가
+          value = {this.state.get}
+          onChange = {this.onChange}
+          />
+        </label>
+      </form>
+    );
+  }
+}
+```
+
+## 제어된 입력 Null 값
+제어 컴포넌트에 value prop을 지정하면 의도하지 않는한 사용자가 변경할 수 없습니다 value를 설정했는데 여저히 수정할 수 있다면 실수로 value를 undifined나 null로 설정했을 수 있습니다
+
+## 제어 컴포넌트의 대안
+데이터를 변경할 수 있는 모든 방법에 대해 이벤트 핸들러를 작성하고 React 컴포넌트를 통해 모든 입력 상태를 연결해야 하기 때문에 때로는 제어 컴포넌트를 사용하는게 지루할 수 있습니다 특히 지존의 코드 베이스를 React로 변경하고자 할 때나 React가 아닌 라이버리와 React 어플리케이션을 통합하고자 할떄 짜증이 날수도 있습니다 이러한 경우에 입력 폼을 구현하기 위한 대체 기술이 있습니다 이것을 비제어 컴포넌트라고 합니다
